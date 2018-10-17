@@ -1,5 +1,15 @@
 FROM php:7.2-apache
 
+ENV APACHE_DOCUMENT_ROOT /app
+
+RUN sed -ri \
+        -e "s/AccessFileName .htaccess/#AccessFileName .htaccess/g" \
+        -e "s/AllowOverride All/AllowOverride None/g"  \
+        -e "s/ServerTokens OS/ServerTokens Prod/g" \
+        -e "s/ServerSignature On/ServerSignature Off/g" \
+        /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf \
+    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     #echo "deb http://mirrors.aliyun.com/debian stretch main contrib non-free">/etc/apt/sources.list;\
     #echo "deb-src http://mirrors.aliyun.com/debian stretch main contrib non-free">>/etc/apt/sources.list;\
