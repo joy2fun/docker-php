@@ -6,18 +6,9 @@ RUN mkdir ${APACHE_DOCUMENT_ROOT} && chown -R www-data:www-data ${APACHE_DOCUMEN
     && sed -ri \
         -e "s/AccessFileName .htaccess/#AccessFileName .htaccess/" \
         -e "s/AllowOverride All/AllowOverride None/g"  \
-        /etc/apache2/conf-available/*.conf \
-    && sed -ri \
         -e "s/ServerTokens OS/ServerTokens Prod/g" \
         -e "s/ServerSignature On/ServerSignature Off/g" \
         /etc/apache2/conf-available/*.conf \
-    && ( \
-        cd /etc/apache2/mods-enabled \
-        && ln -sf ../mods-available/headers.load headers.load \
-        && ln -sf ../mods-available/remoteip.load remoteip.load \
-        && ln -sf ../mods-available/rewrite.load rewrite.load \
-        && ln -sf ../mods-available/headers.load headers.load \
-    ) \
     #&& sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
     && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
