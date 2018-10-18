@@ -1,20 +1,27 @@
-FROM php:7.2-apache
+FROM php:7.2-fpm-alpine
 
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
-    #echo "deb http://mirrors.aliyun.com/debian stretch main contrib non-free">/etc/apt/sources.list;\
-    #echo "deb-src http://mirrors.aliyun.com/debian stretch main contrib non-free">>/etc/apt/sources.list;\
-    #echo "deb http://mirrors.aliyun.com/debian stretch-updates main contrib non-free">>/etc/apt/sources.list;\
-    #echo "deb-src http://mirrors.aliyun.com/debian stretch-updates main contrib non-free">>/etc/apt/sources.list;\
-    #echo "deb http://mirrors.aliyun.com/debian-security stretch/updates main contrib non-free">>/etc/apt/sources.list;\
-    #echo "deb-src http://mirrors.aliyun.com/debian-security stretch/updates main contrib non-free">>/etc/apt/sources.list;\
-    apt-get update \
-    && apt-get install -y --no-install-recommends \
-        libzip4 \
+#RUN sed -i -e "s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g" /etc/apk/repositories
+RUN apk add --no-cache --virtual .build-deps \
+        tzdata \
+        linux-headers \
         libzip-dev \
+        curl-dev \
+        git \
+    && apk add --no-cache --virtual .persistent-deps \
+        libzip \
+        unzip \
+# user & group
+    && addgroup -g 3000 -S app \
+    && adduser -u 3000 -S -D -G app app \
+# timezone
+    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone \
     && docker-php-source extract \
 # configure zip, including install phpize_deps
     && docker-php-ext-configure zip --with-libzip \
-# install hiredis
+# pecl first
+    && pecl install ds \
+# phpiredis
     && curl -fsSL 'https://github.com/redis/hiredis/archive/v0.13.3.tar.gz' -o hiredis.tar.gz \
     && mkdir -p hiredis \
     && tar -xf hiredis.tar.gz -C hiredis --strip-components=1 \
@@ -37,15 +44,16 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
         && make install \
     ) \
     && rm -r phpiredis \
-    && docker-php-ext-enable phpiredis \
-    && docker-php-ext-install -j$(nproc) pdo_mysql zip \
+# molten
+    && git clone --depth=1 https://github.com/chuan-yun/Molten.git /usr/src/php/ext/molten \
+    && docker-php-ext-configure molten --enable-zipkin-header=yes \
+# install exts
+    && docker-php-ext-install -j$(nproc) zip pdo_mysql molten \
     && docker-php-source delete \
-    && apt-get remove -y libzip-dev \
-    && apt-get purge -y \
-    && apt autoremove -y \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
+    && apk del .build-deps \
 # composer
     #&& curl -s https://raw.githubusercontent.com/composer/getcomposer.org/877cb10b101957ef8bbb9d196f711dbb8a011bb4/web/installer | php -- --install-dir=/bin --filename=composer --quiet \
     && echo done!
+
+WORKDIR /www
 
