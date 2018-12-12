@@ -1,4 +1,4 @@
-FROM php:7.2-fpm-alpine
+FROM php:7.3-fpm-alpine
 
 #RUN sed -i -e "s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g" /etc/apk/repositories
 RUN apk add --no-cache --virtual .build-deps \
@@ -52,7 +52,7 @@ RUN apk add --no-cache --virtual .build-deps \
     && docker-php-source delete \
     && apk del .build-deps \
 # composer
-    #&& curl -s https://raw.githubusercontent.com/composer/getcomposer.org/877cb10b101957ef8bbb9d196f711dbb8a011bb4/web/installer | php -- --install-dir=/bin --filename=composer --quiet \
+    && curl -s https://raw.githubusercontent.com/composer/getcomposer.org/877cb10b101957ef8bbb9d196f711dbb8a011bb4/web/installer | php -- --install-dir=/bin --filename=composer --quiet \
     && echo done!
 
 WORKDIR /www
