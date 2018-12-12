@@ -55,5 +55,5 @@ RUN apk add --no-cache --virtual .build-deps \
     && curl -s https://raw.githubusercontent.com/composer/getcomposer.org/877cb10b101957ef8bbb9d196f711dbb8a011bb4/web/installer | php -- --install-dir=/bin --filename=composer --quiet \
     && echo done!
 
-WORKDIR /www
+WORKDIR /app
 
