@@ -2,6 +2,12 @@ FROM php:7.3-apache
 
 ENV APACHE_DOCUMENT_ROOT /app
 
+ENV LANG en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+
+COPY ali-apt /usr/local/bin/
+COPY laravel-apache2.conf /etc/apache2/
+
 RUN mkdir ${APACHE_DOCUMENT_ROOT} && chown -R www-data:www-data ${APACHE_DOCUMENT_ROOT} \
     && sed -ri \
         -e "s/AccessFileName .htaccess/#AccessFileName .htaccess/" \
@@ -9,19 +15,13 @@ RUN mkdir ${APACHE_DOCUMENT_ROOT} && chown -R www-data:www-data ${APACHE_DOCUMEN
         -e "s/ServerTokens OS/ServerTokens Prod/g" \
         -e "s/ServerSignature On/ServerSignature Off/g" \
         /etc/apache2/conf-available/*.conf \
-    #&& sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
-    && sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
+    && sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
+    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' \
         /etc/apache2/apache2.conf \
         /etc/apache2/conf-available/*.conf \
-        /etc/apache2/sites-enabled/*.conf 
+        /etc/apache2/sites-enabled/*.conf
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
-    #echo "deb http://mirrors.aliyun.com/debian stretch main contrib non-free">/etc/apt/sources.list;\
-    #echo "deb-src http://mirrors.aliyun.com/debian stretch main contrib non-free">>/etc/apt/sources.list;\
-    #echo "deb http://mirrors.aliyun.com/debian stretch-updates main contrib non-free">>/etc/apt/sources.list;\
-    #echo "deb-src http://mirrors.aliyun.com/debian stretch-updates main contrib non-free">>/etc/apt/sources.list;\
-    #echo "deb http://mirrors.aliyun.com/debian-security stretch/updates main contrib non-free">>/etc/apt/sources.list;\
-    #echo "deb-src http://mirrors.aliyun.com/debian-security stretch/updates main contrib non-free">>/etc/apt/sources.list;\
     apt-get update \
     && apt-get install -y --no-install-recommends \
         libzip4 \

@@ -4,5 +4,13 @@
  - disabled .htaccess
  - default timezone: PRC
  - doc root & workdir: /app
- - apache2.conf for Laravel
+ - ali-apt to use aliyun sources.list
+
+## Laravel
+
+```Dockerfile
+FROM joy2fun/php:apache
+
+RUN cp -f /etc/apache2/laravel-apache2.conf /etc/apache2/apache2.conf
+```
 
