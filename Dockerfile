@@ -31,6 +31,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
         freetds-dev \
         freetds-common \
 # molten deps
+        git \
         linux-headers-4.9.0-8-amd64 \
     && ln -sf /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/ \
     && docker-php-source extract \
@@ -69,7 +70,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
       zip \
       molten \
     && docker-php-source delete \
-    && apt-get remove -y libzip-dev \
+    && apt-get remove -y libzip-dev git \
     && apt-get purge -y \
     && apt autoremove -y \
     && apt-get clean \
