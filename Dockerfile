@@ -31,7 +31,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
         freetds-dev \
         freetds-common \
 # molten deps
-        linux-headers \
+        linux-headers-$(uname -r) \
     && ln -sf /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/ \
     && docker-php-source extract \
 # configure zip, including install phpize_deps
