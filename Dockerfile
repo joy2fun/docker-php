@@ -6,15 +6,15 @@ ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
 COPY ali-apt /usr/local/bin/
-COPY laravel-apache2.conf /etc/apache2/
+COPY laravel-apache2.conf /etc/apache2/apache2.conf
 
 RUN mkdir ${APACHE_DOCUMENT_ROOT} && chown -R www-data:www-data ${APACHE_DOCUMENT_ROOT} \
-    && sed -ri \
-        -e "s/AccessFileName .htaccess/#AccessFileName .htaccess/" \
-        -e "s/AllowOverride All/AllowOverride None/g"  \
-        -e "s/ServerTokens OS/ServerTokens Prod/g" \
-        -e "s/ServerSignature On/ServerSignature Off/g" \
-        /etc/apache2/conf-available/*.conf \
+    #&& sed -ri \
+        #-e "s/AccessFileName .htaccess/#AccessFileName .htaccess/" \
+        #-e "s/AllowOverride All/AllowOverride None/g"  \
+        #-e "s/ServerTokens OS/ServerTokens Prod/g" \
+        #-e "s/ServerSignature On/ServerSignature Off/g" \
+        #/etc/apache2/conf-available/*.conf \
     && sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
     && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' \
         /etc/apache2/apache2.conf \
@@ -26,6 +26,13 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     && apt-get install -y --no-install-recommends \
         libzip4 \
         libzip-dev \
+# pdo_dblib deps
+        freetds-bin \
+        freetds-dev \
+        freetds-common \
+# molten deps
+        linux-headers \
+    && ln -sf /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/ \
     && docker-php-source extract \
 # configure zip, including install phpize_deps
     && docker-php-ext-configure zip --with-libzip \
@@ -53,7 +60,14 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     ) \
     && rm -r phpiredis \
     && docker-php-ext-enable phpiredis \
-    && docker-php-ext-install -j$(nproc) pdo_mysql zip \
+# molten
+    && git clone --depth=1 https://github.com/chuan-yun/Molten.git /usr/src/php/ext/molten \
+    && docker-php-ext-configure molten --enable-zipkin-header=yes \
+    && docker-php-ext-install -j$(nproc) \
+      pdo_mysql \
+      pdo_dblib \
+      zip \
+      molten \
     && docker-php-source delete \
     && apt-get remove -y libzip-dev \
     && apt-get purge -y \
