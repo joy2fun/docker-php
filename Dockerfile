@@ -26,6 +26,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     && apt-get install -y --no-install-recommends \
         libzip4 \
         libzip-dev \
+        libxml2-dev \
 # pdo_dblib deps
         freetds-bin \
         freetds-dev \
