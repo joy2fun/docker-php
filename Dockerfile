@@ -68,6 +68,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
       pdo_mysql \
       pdo_dblib \
       zip \
+      soap \
       molten \
     && docker-php-source delete \
     && apt-get remove -y libzip-dev git \
