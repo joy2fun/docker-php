@@ -12,5 +12,7 @@
 FROM joy2fun/php:apache
 
 RUN cp -f /etc/apache2/laravel-apache2.conf /etc/apache2/apache2.conf
+
+COPY --chown=www-data:www-data /path/to/src/. /app
 ```
 

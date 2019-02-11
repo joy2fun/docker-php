@@ -2,9 +2,6 @@ FROM php:7.3-apache
 
 ENV APACHE_DOCUMENT_ROOT /app
 
-ENV LANG en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
-
 COPY ali-apt /usr/local/bin/
 COPY laravel-apache2.conf /etc/apache2/
 
