@@ -1,4 +1,4 @@
-FROM php:7.2-apache
+FROM php:7.3-apache
 
 ENV APACHE_DOCUMENT_ROOT /app
 
@@ -61,7 +61,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     && rm -r phpiredis \
     && docker-php-ext-enable phpiredis \
 # molten
-    && git clone --depth=1 https://github.com/chuan-yun/Molten.git /usr/src/php/ext/molten \
+    && git clone --depth=1 https://github.com/joy2fun/Molten.git /usr/src/php/ext/molten \
     && docker-php-ext-configure molten --enable-zipkin-header=yes \
     && docker-php-ext-install -j$(nproc) \
       pdo_mysql \
