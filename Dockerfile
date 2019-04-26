@@ -29,6 +29,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
         freetds-dev \
         freetds-common \
 # molten deps
+        libcurl-dev \
         git \
         linux-headers-4.9.0-8-amd64 \
     && ln -sf /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/ \
