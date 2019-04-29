@@ -2,7 +2,6 @@ FROM php:7.3-apache
 
 ENV APACHE_DOCUMENT_ROOT /app
 
-COPY ali-apt /usr/local/bin/
 COPY laravel-apache2.conf /etc/apache2/apache2.conf
 
 RUN mkdir ${APACHE_DOCUMENT_ROOT} && chown -R www-data:www-data ${APACHE_DOCUMENT_ROOT} \
