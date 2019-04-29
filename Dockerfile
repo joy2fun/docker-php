@@ -36,6 +36,8 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     && docker-php-source extract \
 # configure zip, including install phpize_deps
     && docker-php-ext-configure zip --with-libzip \
+# pecl first
+    && pecl install ds \
 # install hiredis
     && curl -fsSL 'https://github.com/redis/hiredis/archive/v0.13.3.tar.gz' -o hiredis.tar.gz \
     && mkdir -p hiredis \
