@@ -1,5 +1,7 @@
 FROM php:7.3
 
+WORKDIR /app
+
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -9,10 +11,6 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
         libzip-dev \
         libxml2-dev \
         openssh-client \
-# pdo_dblib deps
-        #freetds-bin \
-        #freetds-dev \
-        #freetds-common \
         git \
     && ln -sf /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/ \
     && docker-php-source extract \
@@ -26,18 +24,11 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     && apt-get remove -y \
         libzip-dev \
         libxml2-dev \
-        freetds-bin \
-        freetds-dev \
-        freetds-common \
     && apt-get purge -y \
     && apt autoremove -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-# composer
-    && curl -s https://raw.githubusercontent.com/composer/getcomposer.org/877cb10b101957ef8bbb9d196f711dbb8a011bb4/web/installer | php -- --install-dir=/bin --filename=composer --quiet \
     && echo done!
-
-WORKDIR /app
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
@@ -61,3 +52,4 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 ENTRYPOINT ["/bin/sh", "/docker-entrypoint.sh"]
 
 CMD ["composer"]
+
