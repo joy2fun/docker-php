@@ -1,6 +1,7 @@
 FROM php:7.3-apache
 
 ENV APACHE_DOCUMENT_ROOT /app
+ENV TDSVER=7.0
 
 COPY ali-apt /usr/local/bin/
 COPY laravel-apache2.conf /etc/apache2/apache2.conf
@@ -28,6 +29,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
         freetds-bin \
         freetds-dev \
         freetds-common \
+        locales locales-all \
 # molten deps
         libcurl3-dev \
         git \
