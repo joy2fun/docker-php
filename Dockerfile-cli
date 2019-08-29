@@ -1,0 +1,11 @@
+FROM php:alpine
+
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && docker-php-source extract \
+    && docker-php-ext-install -j$(nproc) \
+      pdo_mysql \
+    && docker-php-source delete \
+    && echo done!
+
+WORKDIR /app
+
