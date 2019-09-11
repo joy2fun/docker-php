@@ -1,9 +1,11 @@
 FROM php:alpine
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && apk add --no-cache libxml2-dev \
     && docker-php-source extract \
     && docker-php-ext-install -j$(nproc) \
       pdo_mysql \
+      soap \
     && docker-php-source delete \
     && echo done!
 

@@ -22,6 +22,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt-get install -y --no-install-recommends \
         libzip4 \
         libzip-dev \
+        libxml2-dev \
     && docker-php-source extract \
 # configure zip, including install phpize_deps
     && docker-php-ext-configure zip --with-libzip \
@@ -29,6 +30,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && docker-php-ext-install -j$(nproc) \
       pdo_mysql \
       zip \
+      soap \
     && docker-php-ext-enable opcache \
     && docker-php-source delete \
     && apt-get remove -y \

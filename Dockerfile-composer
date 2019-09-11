@@ -7,6 +7,8 @@ RUN curl -s https://raw.githubusercontent.com/composer/getcomposer.org/877cb10b1
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
+RUN apt-get update && apt-get install --no-install-recommends -y git
+
 WORKDIR /app
 
 ENTRYPOINT ["/bin/sh", "/docker-entrypoint.sh"]
