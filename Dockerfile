@@ -25,6 +25,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
         libzip4 \
         libzip-dev \
         libxml2-dev \
+        libpng-dev \
         zlib1g-dev \
 # pdo_dblib deps
         freetds-bin \
