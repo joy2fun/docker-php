@@ -25,6 +25,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
         libzip4 \
         libzip-dev \
         libxml2-dev \
+        zlib1g-dev \
 # pdo_dblib deps
         freetds-bin \
         freetds-dev \
@@ -73,6 +74,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
       zip \
       soap \
       molten \
+      gd \
     && docker-php-source delete \
     && apt-get remove -y libzip-dev git \
     && apt-get purge -y \
