@@ -7,7 +7,12 @@ RUN curl -s https://raw.githubusercontent.com/composer/getcomposer.org/877cb10b1
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
-RUN apt-get update && apt-get install --no-install-recommends -y git
+RUN sed -i \
+  -e "s@http://deb.debian.org@https://mirrors.huaweicloud.com@g" \
+  -e "s@http://security.debian.org@https://mirrors.huaweicloud.com@g" \
+  /etc/apt/sources.list
+
+RUN apt-get update && apt-get install --no-install-recommends -y git unzip
 
 WORKDIR /app
 
