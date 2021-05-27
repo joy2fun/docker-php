@@ -34,7 +34,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     && ln -sf /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/ \
     && docker-php-source extract \
 # configure zip, including install phpize_deps
-    && docker-php-ext-configure zip --with-libzip \
+    && docker-php-ext-configure zip \
 # pecl first
     && pecl install ds \
 # install hiredis
