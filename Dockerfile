@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:7.3-apache
 
 ENV APACHE_DOCUMENT_ROOT /app
 
@@ -30,11 +30,11 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
 # molten deps
         libcurl3-dev \
         git \
-        linux-headers-4.19.0-16-amd64 \
+        linux-headers-4.9.0-8-amd64 \
     && ln -sf /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/ \
     && docker-php-source extract \
 # configure zip, including install phpize_deps
-    && docker-php-ext-configure zip \
+    && docker-php-ext-configure zip --with-libzip \
 # pecl first
     && pecl install ds \
 # install hiredis
@@ -88,4 +88,3 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     && echo done!
 
 WORKDIR /app
-
