@@ -2,6 +2,9 @@ FROM php:8.1-apache-buster
 
 WORKDIR /var/www/html
 
+COPY php/zzz.ini /usr/local/etc/php/conf.d/zzz.ini
+COPY apache2/sites-enabled/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+
 RUN sed -ri \
     -e "s/AccessFileName .htaccess/#AccessFileName .htaccess/" \
     -e "s/AllowOverride All/AllowOverride None/g"  \
