@@ -1,10 +1,13 @@
 FROM php:8.1-apache-buster
 
-ENV APACHE_DOCUMENT_ROOT /var/www/html
-
-COPY laravel-apache2.conf /etc/apache2/apache2.conf
-
 WORKDIR /var/www/html
+
+RUN sed -ri \
+    -e "s/AccessFileName .htaccess/#AccessFileName .htaccess/" \
+    -e "s/AllowOverride All/AllowOverride None/g"  \
+    -e "s/ServerTokens OS/ServerTokens Prod/g" \
+    -e "s/ServerSignature On/ServerSignature Off/g" \
+    /etc/apache2/conf-available/*.conf
 
 RUN curl -o /usr/local/bin/composer https://getcomposer.org/download/latest-stable/composer.phar \
     && chmod +x /usr/local/bin/composer
